@@ -19,6 +19,7 @@ document.documentElement.classList.add('js');
   items.forEach(function (el) { observer.observe(el); });
 })();
 
+
 const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzBtVAMec-ulrpsO_yQwYaec0euYSzd0_kdGnIaFdNEU89HeOCUwciu1szNYLb3uqvNUA/exec';
 
 const form = document.getElementById('feedback-form');
@@ -79,6 +80,7 @@ if (form) {
       return;
     }
 
+
     if (form.elements.website.value) { showThanks(); return; }
 
     if (FORM_ENDPOINT.indexOf('https://') !== 0) {
@@ -94,6 +96,7 @@ if (form) {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Отправляю…';
 
+ 
     fetch(FORM_ENDPOINT, { method: 'POST', mode: 'no-cors', body: data })
       .then(function () { showThanks(); })
       .catch(function () {
