@@ -1,12 +1,4 @@
-/* ================================================================
-   Страница о театре имени Андрея Миронова: скрипт
-   Два блока:
-   1) плавное появление секций при прокрутке;
-   2) форма: проверка полей и отправка в Google Таблицу
-      через Google Apps Script.
-   ================================================================ */
 
-/* ---------- 1. Появление блоков при прокрутке ---------- */
 document.documentElement.classList.add('js');
 (function () {
   const items = document.querySelectorAll('.section .container > *, .hero-inner > *');
@@ -27,17 +19,7 @@ document.documentElement.classList.add('js');
   items.forEach(function (el) { observer.observe(el); });
 })();
 
-/* ---------- 2. Форма отзыва ----------
-   Что происходит при отправке:
-   1) проверяем поля (имя, тема, сообщение, согласие);
-   2) если скрытое поле-ловушка заполнено, это бот: молча «успех»;
-   3) отправляем данные POST-запросом на адрес Google Apps Script,
-      он дописывает строку в Google Таблицу;
-   4) показываем «спасибо» или ошибку.
-
-   >>> ВСТАВЬ СЮДА АДРЕС из Apps Script (после «Развёртывания»),
-   >>> он заканчивается на /exec. */
-const FORM_ENDPOINT = 'ВСТАВЬ_СЮДА_АДРЕС_APPS_SCRIPT';
+const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzBtVAMec-ulrpsO_yQwYaec0euYSzd0_kdGnIaFdNEU89HeOCUwciu1szNYLb3uqvNUA/exec';
 
 const form = document.getElementById('feedback-form');
 
@@ -97,7 +79,6 @@ if (form) {
       return;
     }
 
-    // Бот заполнил скрытое поле: делаем вид, что всё хорошо, но ничего не отправляем
     if (form.elements.website.value) { showThanks(); return; }
 
     if (FORM_ENDPOINT.indexOf('https://') !== 0) {
@@ -113,8 +94,6 @@ if (form) {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Отправляю…';
 
-    // mode:'no-cors': Google отвечает без CORS-заголовков, поэтому ответ мы не читаем.
-    // Если сеть работает и запрос ушёл, считаем успехом.
     fetch(FORM_ENDPOINT, { method: 'POST', mode: 'no-cors', body: data })
       .then(function () { showThanks(); })
       .catch(function () {
